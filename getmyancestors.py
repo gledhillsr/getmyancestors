@@ -214,8 +214,8 @@ class Session:
                 continue
             try:
                 return r.json()
-            except Exception as e:
-                self.write_log('WARNING: corrupted file from %s, error: %s' % (url, e))
+            except:
+                self.write_log('WARNING: corrupted file from ' + url)
                 return None
 
     # retrieve FamilySearch current user ID
@@ -361,7 +361,8 @@ class Memorie:
     def __init__(self, data=None):
         self.description = self.url = None
         if data and 'links' in data:
-            self.url = data['about']
+            if 'alternate' in data['links']:
+                self.url = data['links']['alternate'][0]['href']
             if 'titles' in data:
                 self.description = data['titles'][0]['value']
             if 'descriptions' in data:
@@ -508,11 +509,7 @@ class Indi:
                 memorie = self.tree.fs.get_url(url)
                 if memorie and 'sourceDescriptions' in memorie:
                     for x in memorie['sourceDescriptions']:
-                        if x['mediaType'] == 'text/plain':
-                            text = '\n'.join(val.get('value', '') for val in x.get('titles', []) + x.get('descriptions', []))
-                            self.notes.add(Note(text, self.tree))
-                        else:
-                            self.memories.add(Memorie(x))
+                        self.memories.add(Memorie(x))
 
     # add a fams to the individual
     def add_fams(self, fams):
@@ -657,11 +654,13 @@ class Fam:
                     new_sources = quotes.keys() - self.tree.sources.keys()
                     if new_sources:
                         sources = self.tree.fs.get_url('/platform/tree/couple-relationships/%s/sources.json' % self.fid)
-                        for source in sources['sourceDescriptions']:
-                            if source['id'] in new_sources and source['id'] not in self.tree.sources:
-                                self.tree.sources[source['id']] = Source(source, self.tree)
+                        if sources and 'sourceDescriptions' in sources:
+                            for source in sources['sourceDescriptions']:
+                                if source['id'] in new_sources and source['id'] not in self.tree.sources:
+                                    self.tree.sources[source['id']] = Source(source, self.tree)
                     for source_fid in quotes:
-                        self.sources.add((self.tree.sources[source_fid], quotes[source_fid]))
+                        if source_fid in self.tree.sources:
+                            self.sources.add((self.tree.sources[source_fid], quotes[source_fid]))
 
     # retrieve marriage notes
     def get_notes(self):
