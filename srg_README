@@ -1,0 +1,54 @@
+#7 generations ancestors
+#1 generations descents (each persons direct kids only)
+#include spouse and couple infromation
+#include LDS ordinances
+#save gedcom as "out.ged"
+parser.add_argument('-u', metavar='<STR>', type=str, help='FamilySearch username')
+#-p type=str, help='FamilySearch password')
+#-i type=str, help='List of individual FamilySearch IDs for whom to retrieve ancestors')
+#-a type=int, default=4, help='Number of generations to ascend [4]')
+#-d type=int, default=0, help='Number of generations to descend [0]')
+#-m default=False, help='Add spouses and couples information [False]')
+#-r default=False, help='Add list of contributors in notes [False]')
+#-c default=False, help='Add LDS ordinances (need LDS account) [False]')
+#-v default=False, help="Increase output verbosity [False]")
+#-t type=int, default=60, help='Timeout in seconds [60]')
+#-o default=sys.stdout, help='output GEDCOM file [stdout]')
+#-l default=sys.stderr, help='output log file [stderr]')
+
+-- (5 up 1 down, 35 seconds) --
+python3 getmyancestors.py -o srg_5_1.ged -a 5 -d 1
+Downloaded 391 individuals, 52 families, 5720 sources and 2367 notes in 35 seconds with 1015 HTTP requests.
+
+--- (5 up 1 down, ordinances, 100 seconds) 
+python3 getmyancestors.py -o srg_5_1_ord.ged -a 5 -d 1 -c 
+  //Downloaded 391 individuals, 53 families, 5715 sources and 2364 notes in 100 seconds with 1407 HTTP requests
+
+-- (5 up, 1 down, w/spouse & marriage Info, 63 seconds)
+python3 getmyancestors.py -o srg_5_1_couples.ged -a 5 -d 1 -m
+  //Downloaded 661 individuals, 329 families, 10403 sources and 4375 notes in 63 seconds with 2434 HTTP requests.
+
+--- (5 up 1 down, ordinances, and (w/spouse & marriage Info) info, 77 seconds) -- "m" marriage and "c" ordinances
+python3 getmyancestors.py -o srg_5_1_couple_ord.ged -a 5 -d 1 -m -c
+  //Downloaded 661 individuals, 329 families, 10403 sources and 4375 notes in 77 seconds with 3096 HTTP requests.
+
+--- (5 up, 0 down, w/spouse & marriage Info, 23 seconds)
+python3 getmyancestors.py -o srg_5_0_couples.ged -m
+  //Downloaded 46 individuals, 30 families, 986 sources and 423 notes in 17 seconds with 205 HTTP requests. 
+
+--- (10up, 1 down, 6 1/2 minutes, 6.3M file) 
+python3 getmyancestors.py -o nrg_10_1.ged -a 10 -d 1 
+  //Downloaded 3907 individuals, 686 families, 7837 sources and 6672 notes in 401 seconds with 5585 HTTP requests.
+
+-- (15 up, 1 down, 7 minutes, 10M file)
+python3 getmyancestors.py -o nrg_15_1.ged -a 15 -d 1
+  //Downloaded 9586 individuals, 1847 families, 11421 sources and 11816 notes in 419 seconds with 12747 HTTP requests.
+
+-- (15 up, 1 down, w/spouse & marriage Info,  14 minutes, 15M file)
+python3 getmyancestors.py -o nrg_15_1_couples.ged -a 15 -d 1 -m
+  //Downloaded 12963 individuals, 5299 families, 16950 sources and 16690 notes in 864 seconds with 27360 HTTP requests.
+
+=== (10 up, 5 down w/spouses & marriage Info.  13.5 HOURS, 1,400M file)
+     1.1M HTTP requests, 398,699 
+  //Downloaded 398,699 individuals, 165,346 families, 201,1575 sources and 85,6784 notes in 48,506 seconds with 1,093,317 HTTP requests.
+
